@@ -1,5 +1,6 @@
 from menu import MENU, resources
 
+money = 2.5
 user_choice = input("What would you like? (espresso/latte/cappuccino) ").lower()
 if user_choice == "report":
     for key, value in resources.items():
@@ -7,6 +8,7 @@ if user_choice == "report":
             print("{}: {}g".format(key, value).capitalize())
             continue
         print("{}: {}ml".format(key, value).capitalize())
+    print(f"Money: ${money}")
 
 
 
