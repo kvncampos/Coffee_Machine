@@ -1,16 +1,50 @@
 from menu import MENU, resources
+import sys
+from time import sleep
 
 money = 2.5
-user_choice = input("What would you like? (espresso/latte/cappuccino) ").lower()
-if user_choice == "report":
-    for key, value in resources.items():
-        if key == "coffee":
-            print("{}: {}g".format(key, value).capitalize())
+
+
+def check_resources():
+    ###checks the resources remaining vs needed for coffee###
+    drink_selector = user_choice
+    print(MENU[drink_selector])
+
+machine_on = True
+
+while machine_on:
+    user_choice = input("What would you like? (espresso/latte/cappuccino) ").lower()
+    if user_choice == "report":
+        for key, value in resources.items():
+            if key == "coffee":
+                print("{}: {}g".format(key, value).capitalize())
+                continue
+            print("{}: {}ml".format(key, value).capitalize())
+        print(f"Money: ${money}")
+    elif user_choice == "espresso":
+        print("espresso")
+    elif user_choice == "latte":
+        print("latte")
+        check_resources()
+    elif user_choice == "cappuccino":
+        print("cappuccino")
+    elif user_choice == "off":
+        choice = input("Are you sure you want to power-off? ").lower()
+        if choice == "yes":
+            print("Coffee Machine attempting to power off...")
+            animation = ["⢿", "⣻", "⣽", "⣾", "⣷", "⣯", "⣟", "⡿"]
+
+            for i in range(100):
+                sleep(0.1)
+                sys.stdout.write("\r" + animation[i % len(animation)])
+                sys.stdout.flush()
+                # do something
+            print("Shutoff Successful!")
+            exit()
+        else:
             continue
-        print("{}: {}ml".format(key, value).capitalize())
-    print(f"Money: ${money}")
-
-
+    else:
+        print("That's not a valid selection, try again.")
 
 # Coin Operated Machine
 # Penny = 1 cent - 0.01
@@ -35,4 +69,3 @@ if user_choice == "report":
 
 # 5.
 # if good. make coffee, and reduce resources available.
-
