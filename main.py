@@ -1,6 +1,12 @@
-from menu import MENU
+from menu import MENU, resources
 
-print(MENU)
+user_choice = input("What would you like? (espresso/latte/cappuccino) ").lower()
+if user_choice == "report":
+    for key, value in resources.items():
+        if key == "coffee":
+            print("{}: {}g".format(key, value).capitalize())
+            continue
+        print("{}: {}ml".format(key, value).capitalize())
 
 
 
