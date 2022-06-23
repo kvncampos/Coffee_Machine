@@ -2,7 +2,7 @@ from menu import MENU, resources
 import sys
 from time import sleep
 
-money = 2.5
+money_in_machine = 0
 
 
 def check_resources():
@@ -63,28 +63,66 @@ def left_stock():
 
 
 def report():
+    print("\nThe Current Status Inventory is: ")
     for key, value in resources.items():
         if key == "coffee":
             print("{}: {}g".format(key, value).capitalize())
             continue
         print("{}: {}ml".format(key, value).capitalize())
-    print(f"Money: ${money}")
+    print(f"Money: ${money_in_machine}\n")
+
+
+def item_price(drink, quarter, dime, nickel, pennie):
+    """Provides Cost of Drink, Difference in price"""
+    global money_in_machine
+    # Gives cost of Drink and subtracts money given
+    item_cost = MENU[drink]["cost"]
+    # print(f"\n{drink} costs: ${item_cost}")
+    total_coin_deposit = [float(quarters) * .25, float(dimes) * .10, float(nickels) * .05, float(pennies) * .01]
+    money_inserted = 0
+    for coin in total_coin_deposit:
+        money_inserted += coin
+
+    coin_value = {
+        "quarter": .25,
+        "dime": .10,
+        "nickel": .05,
+        "penny": .01,
+    }
+
+    if money_inserted > item_cost:
+        difference = money_inserted - item_cost
+        print(f"Here is your refund of ${money_inserted - item_cost}")
+        money_in_machine += difference
+    else:
+        myFloat = item_cost - money_inserted
+        print("That's not enough money.\n")
+        print(f"You inserted ${money_inserted} and are missing ${format(myFloat, '.2f')}\nYour money wil be refunded.")
+        print("\nTry again, please.")
+        return 0
 
 
 machine_on = True
 
 while machine_on:
     user_choice = input("What would you like? (espresso/latte/cappuccino) ").lower()
+    while user_choice not in ["report", "latte", "espresso", "cappuccino"]:
+        break
     if user_choice == "report":
         report()
-        # for key, value in resources.items():
-        #     if key == "coffee":
-        #         print("{}: {}g".format(key, value).capitalize())
-        #         continue
-        #     print("{}: {}ml".format(key, value).capitalize())
-        # print(f"Money: ${money}")
+        # Add a clear function/module so this report disappears after a delay
+        continue
+    # Provide cost of Menu Item
+    print("The price of this item is: $", MENU[user_choice]["cost"])
 
-    elif user_choice == "espresso":
+    # Currency Check and Sum of Difference.
+    print("Please insert coins.")
+    quarters = input("how many quarters?: ")
+    dimes = input("how many dimes?: ")
+    nickels = input("how many nickels? ")
+    pennies = input("how many pennies?: ")
+
+    if user_choice == "espresso":
         # print("espresso")
         check_resources()
         resources, test = check_resources()
@@ -92,9 +130,13 @@ while machine_on:
 
     elif user_choice == "latte":
         # print("latte")
+        item_price(user_choice, quarters, nickels, dimes, pennies)
         check_resources()
         resources, test = check_resources()
         left_stock()
+
+        # might delete bottom and move to report only...
+        print("Current Money in Machine: $", money_in_machine)
 
     elif user_choice == "cappuccino":
         # print("cappuccino")
@@ -116,11 +158,6 @@ while machine_on:
     # if check_resources() == "No more Stock":
     #     print("Testing for empty stock")
     #     exit()
-# Coin Operated Machine
-# Penny = 1 cent - 0.01
-# Nickel = 5 cents - 0.05
-# Dime = 10 cents - 0.10
-# Quarter = 25 cents - 0.25
 
 # 1.
 # Print Report using 'report' to show what resources it has left.
